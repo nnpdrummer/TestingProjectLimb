@@ -4,40 +4,65 @@ using UnityEngine;
 
 public class PanelButton : PhoneButton
 {
-    // The panels for each of the main phone page's face buttons.
-    public GameObject investigationPanel;
-    public GameObject inventoryPanel;
-    public GameObject brycePanel;
-    public GameObject mediaPanel;
-    public GameObject webPanel;
-    public GameObject optionsPanel;
+    public GameObject pnlToOpen;
+    public GameObject[] pnlsToClose;
+    public GameObject[] pnlBtns;
 
-    // constants dictating the pulse delay, and the size of the pulse. Change to see different pulse combinations.
+    private float[] btnSizeX;
+    private float[] btnSizeY;
+
     private const float pulseDelay = .01f;
-    private const float buttonScaleIncrease = .1f;
+    private const float btnScaleIncrease = .1f;
 
-    public override void OnClickEvent() { Debug.Log("Panel Button pressed"); }
-
-    // Returns the buttonScaleIncrease constant to a child class.
-    protected float getButtonScaleIncrease() { return buttonScaleIncrease; }
-
-    // Obtains various panel button dimensions and proceeds to "pulse" those buttons.
-    protected void PanelButtonPulse()
+    public override void OnClickEvent()
     {
+        if (pnlToOpen.activeSelf) { pnlToOpen.SetActive(false); }
+        else { pnlToOpen.SetActive(true); closePnlsPulseBtns(); }
+    }
+
+    private void closePnlsPulseBtns()
+    {
+        CloseUIPanels();
         GetButtonDimensions();
         StartCoroutine("Pulse");
+    }
+
+    private void CloseUIPanels()
+    {
+        for (int pI = 0; pI < pnlsToClose.Length; pI++) { pnlsToClose[pI].SetActive(false); }
     }
 
     private IEnumerator Pulse()
     {
         yield return new WaitForSeconds(pulseDelay);
         scaleUpPanelButtons();
-        
+
         yield return new WaitForSeconds(pulseDelay);
         scaleDownPanelButtons();
     }
 
-    protected virtual void GetButtonDimensions() { Debug.Log("Get Panel Button Dimensions"); }
-    protected virtual void scaleUpPanelButtons() { Debug.Log("Scale up Panel Buttons"); }
-    protected virtual void scaleDownPanelButtons() { Debug.Log("Scale down Panel Buttons"); }
+    //Obtains the dimensions of each panel button.
+    private void GetButtonDimensions()
+    {
+        btnSizeX = new float[pnlBtns.Length];
+        btnSizeY = new float[pnlBtns.Length];
+
+        for (int bI = 0; bI < pnlBtns.Length; bI++)
+        {
+            btnSizeX[bI] = pnlBtns[bI].transform.localScale.x;
+            btnSizeY[bI] = pnlBtns[bI].transform.localScale.y;
+        }
+    }
+
+    // Scales up the following buttons. Used for first half of pulse.
+    private void scaleUpPanelButtons()
+    {
+        for (int bI = 0; bI < pnlBtns.Length; bI++) { pnlBtns[bI].transform.localScale = new Vector2(btnSizeX[bI] + btnScaleIncrease, btnSizeY[bI] + btnScaleIncrease); }
+    }
+
+    // Scales down the following buttons. Used for second half of pulse.
+    private void scaleDownPanelButtons()
+    {
+        for (int bI = 0; bI < pnlBtns.Length; bI++) { pnlBtns[bI].transform.localScale = new Vector2(btnSizeX[bI], btnSizeY[bI]); }
+    }
 }

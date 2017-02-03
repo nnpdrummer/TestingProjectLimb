@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class SwitchPageButton : PhoneButton
 {
-	public override void OnClickEvent() { Debug.Log("Switch Page Button pressed"); }
+    public GameObject currentScrennPnl;
+    public GameObject nextScreenPnl;
 
-    // add a switch page function.
+    public override void OnClickEvent()
+    {
+        nextScreenPnl.SetActive(true);
+        currentScrennPnl.SetActive(false);
+    }
 }

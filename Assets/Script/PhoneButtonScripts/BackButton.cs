@@ -4,29 +4,26 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // Probably add further child classes for each phone page
-public class BackButton : PhoneButton
+public class BackButton : FaceButton
 {
-    public GameObject[] uIObjectsToCloseOnScreen;
-    public GameObject currentScreen;
     public GameObject previousScreen;
 
     public override void OnClickEvent()
     {
-        Debug.Log("Back button pressed");
-        GoBack();
+        CloseAllUIComponents();
     }
 
     // Add seperate statements to further implement.
-    private void GoBack()
+    protected override void CloseAllUIComponents()
     {
-        int activeObjects = 0;
+        int activeComponents = 0;
 
-        for(int objectIterator = 0; objectIterator < uIObjectsToCloseOnScreen.Length; objectIterator++)
+        for(int uII = 0; uII < uIComponentsToClose.Length; uII++)
         {
-            if(uIObjectsToCloseOnScreen[objectIterator].activeSelf) { uIObjectsToCloseOnScreen[objectIterator].SetActive(false); activeObjects++; }
+            if(uIComponentsToClose[uII].activeSelf) { uIComponentsToClose[uII].SetActive(false); activeComponents++; }
         }
         
-        if(activeObjects == 0)
+        if(activeComponents == 0)
         {
             currentScreen.SetActive(false);
             previousScreen.SetActive(true);

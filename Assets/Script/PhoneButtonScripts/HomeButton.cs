@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class HomeButton : FaceButton
 {
+    public GameObject mainPhoneScreenPanel;
+
     public override void OnClickEvent()
     {
-        CloseAllPanels();
+        CloseAllUIComponents();
         GoHome();
     }
 
     private void GoHome()
     {
-        //Add panels as needed.
+        currentScreen.SetActive(false);
         mainPhoneScreenPanel.SetActive(true);
-        mapPhoneScreenPanel.SetActive(false);
     }
 }
