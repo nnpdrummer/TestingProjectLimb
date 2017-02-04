@@ -6,31 +6,31 @@ public class DialogueNode
     private int nodeID;
     private string characterName;
     private string prompt;
-    private string[] responses;
+    private List<DialogueChoice> responses;
 
     public DialogueNode()
     {
-        nodeID = -2;
+        nodeID = -1;
         characterName = "";
         prompt = "";
-        responses = new string[0];
+        responses = new List<DialogueChoice>();
     }
 
-    public DialogueNode(int newNodeID, string newName, string newPrompt, string[] newResponses)
+    public DialogueNode(int newNodeID, string newName, string newPrompt, List<DialogueChoice> newResponses)
     {
         nodeID = newNodeID;
         characterName = newName;
         prompt = newPrompt;
-        copyArray(newResponses);
+        responses = new List<DialogueChoice>(newResponses);
     }
 
-    private void copyArray(string[] newResponses)
+    public int getNodeID()
     {
-        responses = new string[newResponses.Length];
+        return nodeID;
+    }
 
-        for(int responseIterator = 0; responseIterator < newResponses.Length; responseIterator++)
-        {
-            responses[responseIterator] = newResponses[responseIterator];
-        }
+    public string getPrompt()
+    {
+        return prompt;
     }
 }

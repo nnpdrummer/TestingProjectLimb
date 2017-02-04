@@ -2,53 +2,85 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class DialogueSystem : MonoBehaviour {
-
+public class DialogueSystem : MonoBehaviour
+{
     public TextAsset textFile;
     private string[] textLines;
-    private char[] p;
-    public int nodeCounter;
-    public string element1;
+    private List<DialogueNode> dialogueNodes;
+
+    public Text dialogueTextBox;
+    public Image characterPic;
+    public Text playerChoice1;
+    public Text playerChoice2;
+    public Text playerChoice3;
+    public Text playerChoice4;
+    public Text playerChoice5;
 
     private void Start()
     {
         if (textFile != null)
         {
             textLines = textFile.text.Split('\n');
+            ParseInformation();
+            DisplayInformation();
         }
-        CopyLines();
-        CreateNodes();
     }
 
-    private void CopyLines()
+    private void DisplayInformation()
     {
-        p = new char[textLines[0].Length];
-        for (int pI = 0; pI < textLines[0].Length; pI++)
+        dialogueTextBox.text = dialogueNodes[0].getPrompt();
+    }
+
+    private void ParseInformation()
+    {
+        int nodeID = 0, linkedNode = -1;
+        string characterName = "", prompt = "";
+        List<DialogueChoice> playerChoices = new List<DialogueChoice>();
+        dialogueNodes = new List<DialogueNode>();
+        prompt = "";
+
+        for (int lineIterator = 0; lineIterator < textLines.Length; lineIterator++)
         {
-            p[pI] = textLines[0][pI];
-            Debug.Log(p[pI]);
-        }
+            string currentLine = textLines[lineIterator].Trim();
 
-        Debug.Log(p[1] == '\n');
+            if (char.IsNumber(currentLine[0]))
+            {
+                int.TryParse(currentLine, out nodeID);
+            }
+            else if (isCharacterName(currentLine))
+            {
+                characterName = currentLine;
+            }
+            else if (currentLine[0] == '*')
+            {
+                linkedNode = (int)char.GetNumericValue(currentLine[currentLine.Length - 1]);
+                currentLine = currentLine.TrimEnd();
+                currentLine.Trim('*');
+                DialogueChoice newChoice = new DialogueChoice(currentLine, linkedNode);
+                playerChoices.Add(newChoice);
+            }
+            else if (currentLine.Equals("~"))
+            {
+                DialogueNode newNode = new DialogueNode(nodeID, characterName, prompt, playerChoices);
+                dialogueNodes.Add(newNode);
+                playerChoices.Clear();
+                prompt = "";
+            }
+            else
+            {
+                prompt += currentLine;
+            }
+        }
     }
 
-    private void CreateNodes()
+    private bool isCharacterName(string nameToCheck)
     {
-        nodeCounter = 0;
-
-        //element1 = p[2];
-
-        // Debug.Log(p[2]);
-        //Debug.Log("updated" + p[2].Equals("Ugghhhh, today is such a long day; can't wait to go home and smell my dog."));
-
-        //for (int lineIterator = 0; lineIterator < textLines.Length; lineIterator++)
-        //{
-        //    if (textLines[lineIterator].Equals("0 "))
-        //    {
-        //        Debug.Log("Did we get here?");
-        //        nodeCounter++;
-        //    }
-        //}
+        switch(nameToCheck)
+        {
+            case "Coleridge1": case "Coleridge2": return true;
+            default: return false;
+        }
     }
 }
