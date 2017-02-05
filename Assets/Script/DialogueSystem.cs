@@ -2,62 +2,53 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class DialogueSystem : MonoBehaviour
+public class DialogueSystem 
 {
-    public TextAsset textFile;
     private string[] textLines;
     private List<DialogueNode> dialogueNodes;
+    private string prompt;
+    private string characterName;
+    private int nodeID;
+    private int linkedNode;
 
-    public Text dialogueTextBox;
-    public Image characterPic;
-    public Text playerChoice1;
-    public Text playerChoice2;
-    public Text playerChoice3;
-    public Text playerChoice4;
-    public Text playerChoice5;
-
-    private void Start()
+    //Ensures the Text file is truely there and parses its contents if it is.
+    public DialogueSystem(TextAsset textFile)
     {
+        dialogueNodes = new List<DialogueNode>();
         if (textFile != null)
         {
             textLines = textFile.text.Split('\n');
             ParseInformation();
-            DisplayInformation();
         }
     }
 
-    private void DisplayInformation()
+    //Returns the nodes so they can be implemented in another class.
+    public List<DialogueNode> getNodeTree()
     {
-        dialogueTextBox.text = dialogueNodes[0].getPrompt();
+        return dialogueNodes;
     }
 
+    // Takes the information from the text file and puts it into separte nodes. Separate nodes are denoted by '~'.
     private void ParseInformation()
     {
-        int nodeID = 0, linkedNode = -1;
-        string characterName = "", prompt = "";
+        InitializeVariables();
         List<DialogueChoice> playerChoices = new List<DialogueChoice>();
-        dialogueNodes = new List<DialogueNode>();
-        prompt = "";
 
-        for (int lineIterator = 0; lineIterator < textLines.Length; lineIterator++)
+        for (int lI = 0; lI < textLines.Length; lI++)
         {
-            string currentLine = textLines[lineIterator].Trim();
+            string currentLine = textLines[lI].Trim();
+            int lineLength = currentLine.Length;
 
-            if (char.IsNumber(currentLine[0]))
-            {
-                int.TryParse(currentLine, out nodeID);
-            }
-            else if (isCharacterName(currentLine))
-            {
-                characterName = currentLine;
-            }
+            if (char.IsNumber(currentLine[0])) int.TryParse(currentLine, out nodeID);
+            else if (IsCharacterName(currentLine)) characterName = currentLine; 
+
             else if (currentLine[0] == '*')
             {
-                linkedNode = (int)char.GetNumericValue(currentLine[currentLine.Length - 1]);
-                currentLine = currentLine.TrimEnd();
-                currentLine.Trim('*');
+                if (currentLine[lineLength - 2] == '-') { linkedNode = -1; }
+                else { linkedNode = (int)char.GetNumericValue(currentLine[lineLength - 1]); }
+
+                currentLine = currentLine.Remove(lineLength - 2);
                 DialogueChoice newChoice = new DialogueChoice(currentLine, linkedNode);
                 playerChoices.Add(newChoice);
             }
@@ -68,18 +59,25 @@ public class DialogueSystem : MonoBehaviour
                 playerChoices.Clear();
                 prompt = "";
             }
-            else
-            {
-                prompt += currentLine;
-            }
+            else prompt += currentLine;
         }
     }
 
-    private bool isCharacterName(string nameToCheck)
+    //Simple function used to initialize global variables.
+    private void InitializeVariables()
     {
-        switch(nameToCheck)
+        nodeID = 0;
+        linkedNode = 0;
+        characterName = "";
+        prompt = "";
+    }
+
+    //Checks against a plethora of character names and moods to see if a line is used to define the character speaking or not.
+    private bool IsCharacterName(string nameToCheck)
+    {
+        switch (nameToCheck)
         {
-            case "Coleridge1": case "Coleridge2": return true;
+            case "Coleridge1": case "Coleridge2": return true;//Will add to these once more characters are introduced.
             default: return false;
         }
     }

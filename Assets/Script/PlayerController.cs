@@ -21,5 +21,9 @@ public class PlayerController : MonoBehaviour {
             if (phoneCanvas.activeSelf) { phoneCanvas.SetActive(false); }
             else { phoneCanvas.SetActive(true); }
         }
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
 	}
 }

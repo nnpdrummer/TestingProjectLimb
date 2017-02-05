@@ -1,0 +1,44 @@
+0
+Coleridge1
+Hey Bryce, I have something for you to look into...
+* Sure, what is it Coleridge? 1
+* Ugh, can't it wait for later? 2
+* Let me guess, you need me to see if they are still looking for players in the bingo hall downtown. 3
+* Yeah, and I need you to look into leaving me the hell alone! -1
+~
+1
+Coleridge2
+My back hurts really really bad; I'm afraid I won't make it much further...
+* Do you need me to fetch you some pain killers? 3
+* (Sarcastic) Oh, do you need me to fetch you some pain killers? 3
+* Get over it old man, you're lucky I don't give you something else to worry about! 5
+* I don't like where this is going... I think I'm gonna go... -1
+~
+2
+Coleridge2
+No, it's a situation of the utmost priority!
+* Alright, what is it? 1
+* Coleridge, buddy, I'd really like to help out and all but... I've actually got shit to do today. 3
+~
+3
+Coleridge2
+Dammit Bryce, you've gone too far with the smartass jokes this time!
+* Cool it old man, I was only joking, now what was it you needed? 4
+* And you've gone too far with the complaining, lighten up old fella, you're not gonna die any faster being mad at me like this. 5
+* Well, fuck you too old man! -1
+~
+4
+Coleridge2
+Oh no, I'm not letting this slide so easily! I am not talking to you for the rest of the day!
+* Whatever! -1
+* (Under Breath) And to think, it was this easy to get him to shut up this whole time! -1
+* No, I'm not talking to YOU for the rest of the day! -1
+* So, I have to expect even MORE complaining from you tomorrow? -1
+* I have Pizza Rolls! Your favorite! 5
+~
+5
+Coleridge1
+I suddenly feel much better now, thank you Bryce!
+* Uh, no problem? -1
+* It was my pleasure! -1
+~
